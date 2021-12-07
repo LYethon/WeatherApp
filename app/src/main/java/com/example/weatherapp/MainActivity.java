@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public JSONObject requestHistoryWeather(String query, String date) throws InterruptedException, JSONException {
-        // Makes a request for the realtime weather using the query and date
+        // Makes a request for the historic weather using the query and date
         APIRunnable apiRunnable = new APIRunnable(String.format("https://weatherapi-com.p.rapidapi.com/history.json?q=%s&dt=%s&lang=en", query, date));
         Thread apiThread = new Thread(apiRunnable);
 
