@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-
 import okhttp3.*;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,40 +17,64 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         try {
-            JSONObject json1 = makeRequest("St. Catharines");
-            JSONObject json2 = makeRequest("Toronto");
+            JSONObject realtime = requestRealtimeWeather("Toronto");
+            JSONObject history = requestHistoryWeather("Toronto", "2021-12-06");
+            JSONObject forecast = requestForecastWeather("Toronto", 3);
 
             // Do whatever the hell we want with the json object
 
-        } catch (IOException | InterruptedException | JSONException e) {
+        } catch (InterruptedException | JSONException e) {
             System.out.println("LY Exception NEW");
             e.printStackTrace();
         }
 
     }
 
-    public JSONObject makeRequest(String query) throws IOException, InterruptedException, JSONException {
-        // Takes in a string as the query for the api call
+    public JSONObject requestRealtimeWeather(String query) throws InterruptedException, JSONException {
+        // Makes a request for the realtime weather using the query
+        APIRunnable apiRunnable = new APIRunnable(String.format("https://weatherapi-com.p.rapidapi.com/current.json?q=%s", query));
+        Thread apiThread = new Thread(apiRunnable);
 
-        APIRunnable apiRunnable = new APIRunnable(query);
-        Thread testThread = new Thread(apiRunnable);
-
-        testThread.start();
-        testThread.join();
+        apiThread.start();
+        apiThread.join();
 
         String response = apiRunnable.getResponse();
         return new JSONObject(response);
-
     }
+
+    public JSONObject requestHistoryWeather(String query, String date) throws InterruptedException, JSONException {
+        // Makes a request for the realtime weather using the query and date
+        APIRunnable apiRunnable = new APIRunnable(String.format("https://weatherapi-com.p.rapidapi.com/history.json?q=%s&dt=%s&lang=en", query, date));
+        Thread apiThread = new Thread(apiRunnable);
+
+        apiThread.start();
+        apiThread.join();
+
+        String response = apiRunnable.getResponse();
+        return new JSONObject(response);
+    }
+
+    public JSONObject requestForecastWeather(String query, Integer days) throws InterruptedException, JSONException {
+        // Makes a request for the forecast weather using the query and days
+        APIRunnable apiRunnable = new APIRunnable(String.format("https://weatherapi-com.p.rapidapi.com/forecast.json?q=%s&days=%s", query, days));
+        Thread apiThread = new Thread(apiRunnable);
+
+        apiThread.start();
+        apiThread.join();
+
+        String response = apiRunnable.getResponse();
+        return new JSONObject(response);
+    }
+
 }
 
 class APIRunnable implements Runnable {
 
     private String responseString;
-    private String query;
+    private final String url;
 
-    public APIRunnable(String input) {
-        query = input;
+    public APIRunnable(String apiUrl) {
+        url = apiUrl;
     }
 
     @Override
@@ -62,7 +84,7 @@ class APIRunnable implements Runnable {
             // Make request
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
-                    .url(String.format("https://weatherapi-com.p.rapidapi.com/forecast.json?q=%s", query))
+                    .url(url)
                     .get()
                     .addHeader("x-rapidapi-host", "weatherapi-com.p.rapidapi.com")
                     .addHeader("x-rapidapi-key", "f10db8bd73msh7cf4d4ab2643aa8p1a7c51jsnd5a2e8c36f5a")
