@@ -11,6 +11,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -19,6 +22,7 @@ public class Weather extends AppCompatActivity {
 
     String location;
     TextView info, temperature, feelsLike, wind;
+    List<TextView> forecasts = new ArrayList<TextView>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,40 +40,44 @@ public class Weather extends AppCompatActivity {
         feelsLike = findViewById(R.id.feelsLike);
         wind = findViewById(R.id.wind);
 
-        try {
-            JSONObject realtime = requestForecastWeather(location, 7);
+        // Load all 7 forecast elements
+        forecasts.add(findViewById(R.id.forecast1));
+        forecasts.add(findViewById(R.id.forecast2));
+        forecasts.add(findViewById(R.id.forecast3));
+        forecasts.add(findViewById(R.id.forecast4));
+        forecasts.add(findViewById(R.id.forecast5));
+        forecasts.add(findViewById(R.id.forecast6));
+        forecasts.add(findViewById(R.id.forecast7));
 
-            if (realtime.has("error")) {
+        try {
+            JSONObject forecastJSON = requestForecastWeather(location, 8); // Since it includes the current date
+
+            if (forecastJSON.has("error")) {
                 Toast.makeText(this, "Invalid location. Please go back and try again.", Toast.LENGTH_LONG).show();
                 return;
             }
 
             // Pull data from JSON object
-            JSONObject location = realtime.getJSONObject("location");
-            JSONObject current = realtime.getJSONObject("current");
-            JSONObject forecast = realtime.getJSONObject("forecast");
+            JSONObject location = forecastJSON.getJSONObject("location");
+            JSONObject current = forecastJSON.getJSONObject("current");
+            JSONObject forecast = forecastJSON.getJSONObject("forecast");
+
             JSONArray forecastArray = forecast.getJSONArray("forecastday");
 
+            // location
             String city = location.getString("name");
             String region = location.getString("region");
 
+            // current
             Double temperatureVal = current.getDouble("temp_c");
             Double feelsLikeVal = current.getDouble("feelslike_c");
             Double windSpeedVal = current.getDouble("wind_kph");
             String windDirectionVal = current.getString("wind_dir");
 
-            System.out.println(forecastArray);
-            for(int i = 0; i < forecastArray.length(); i++) {
-                JSONObject curr = forecastArray.getJSONObject(i);
-                TextView currentTV;
-                switch (i) {
-                    case 0: {
-                        //lmao gl
-                    }
-                    default: {
-
-                    }
-                }
+            // forecast
+            List<JSONObject> forecastObjects = new ArrayList<JSONObject>();
+            for (int i = 1; i < forecastArray.length(); i++) {
+                forecastObjects.add(forecastArray.getJSONObject(i).getJSONObject("day"));
             }
 
             // Update elements
@@ -77,6 +85,15 @@ public class Weather extends AppCompatActivity {
             temperature.setText(String.format("%d°C", Math.round(temperatureVal)));
             feelsLike.setText(String.format("Feels like %d°C", Math.round(feelsLikeVal)));
             wind.setText(String.format("Wind: %d km/h (%s)", Math.round(windSpeedVal), windDirectionVal));
+
+            // Update up to 7 of the forecast textviews
+            for (int i = 0; i < forecastObjects.size(); i++) {
+                TextView dayTextView = forecasts.get(i);
+                JSONObject day = forecastObjects.get(i);
+
+                Double temperature = day.getDouble("avgtemp_c");
+                dayTextView.setText(String.format("%d°C", Math.round(temperature)));
+            }
 
         } catch (InterruptedException | JSONException e) {
             e.printStackTrace();

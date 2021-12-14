@@ -59,46 +59,39 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/forecast0"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Hello" />
-
-            <TextView
                 android:id="@+id/forecast1"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Hello" />
+                android:layout_height="match_parent" />
 
             <TextView
                 android:id="@+id/forecast2"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Hello2" />
+                android:layout_height="match_parent" />
 
             <TextView
                 android:id="@+id/forecast3"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Hello" />
+                android:layout_height="match_parent" />
 
             <TextView
                 android:id="@+id/forecast4"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Hello2" />
+                android:layout_height="match_parent" />
 
             <TextView
                 android:id="@+id/forecast5"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Hello" />
+                android:layout_height="match_parent" />
 
             <TextView
                 android:id="@+id/forecast6"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Hello2" />
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/forecast7"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
 
         </LinearLayout>
 
