@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +17,7 @@ import okhttp3.Response;
 public class Weather extends AppCompatActivity {
 
     String location;
+    TextView info, temperature, feelsLike, wind;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +25,46 @@ public class Weather extends AppCompatActivity {
         setContentView(R.layout.activity_weather);
         getSupportActionBar().hide();
 
+        // Pull location from main activity
         Intent intent = getIntent();
         location = intent.getStringExtra(MainActivity.LOCATION);
+
+        // Store layout elements
+        info = findViewById(R.id.info);
+        temperature = findViewById(R.id.temperature);
+        feelsLike = findViewById(R.id.feelsLike);
+        wind = findViewById(R.id.wind);
+
+        try {
+            JSONObject realtime = requestRealtimeWeather(location);
+
+            if (realtime.has("error")) {
+                Toast.makeText(this, "Invalid location. Please go back and try again.", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            // Pull data from JSON object
+            JSONObject location = realtime.getJSONObject("location");
+            JSONObject current = realtime.getJSONObject("current");
+
+            String city = location.getString("name");
+            String region = location.getString("region");
+
+            Double temperatureVal = current.getDouble("temp_c");
+            Double feelsLikeVal = current.getDouble("feelslike_c");
+            Double windSpeedVal = current.getDouble("wind_kph");
+            String windDirectionVal = current.getString("wind_dir");
+
+            // Update elements
+            info.setText(String.format("%s, %s", city, region));
+            temperature.setText(String.format("%d°C", Math.round(temperatureVal)));
+            feelsLike.setText(String.format("Feels like %d°C", Math.round(feelsLikeVal)));
+            wind.setText(String.format("Wind: %d km/h (%s)", Math.round(windSpeedVal), windDirectionVal));
+
+        } catch (InterruptedException | JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public JSONObject requestRealtimeWeather(String query) throws InterruptedException, JSONException {
