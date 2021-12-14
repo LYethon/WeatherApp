@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/border.xml" value="0.33645833333333336" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_weather.xml" value="0.31302083333333336" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher 2.xml" value="0.1859375" />
