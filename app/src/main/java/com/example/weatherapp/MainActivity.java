@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-        locationEditText = (EditText) findViewById(R.id.locationEditText);
-        searchTextView = (TextView) findViewById(R.id.searchTextView);
+        locationEditText = findViewById(R.id.locationEditText);
+        searchTextView = findViewById(R.id.searchTextView);
 
         searchTextView.setOnClickListener(new View.OnClickListener() {
             @Override
