@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,7 +37,7 @@ public class Weather extends AppCompatActivity {
         wind = findViewById(R.id.wind);
 
         try {
-            JSONObject realtime = requestRealtimeWeather(location);
+            JSONObject realtime = requestForecastWeather(location, 7);
 
             if (realtime.has("error")) {
                 Toast.makeText(this, "Invalid location. Please go back and try again.", Toast.LENGTH_LONG).show();
@@ -46,6 +47,8 @@ public class Weather extends AppCompatActivity {
             // Pull data from JSON object
             JSONObject location = realtime.getJSONObject("location");
             JSONObject current = realtime.getJSONObject("current");
+            JSONObject forecast = realtime.getJSONObject("forecast");
+            JSONArray forecastArray = forecast.getJSONArray("forecastday");
 
             String city = location.getString("name");
             String region = location.getString("region");
@@ -54,6 +57,20 @@ public class Weather extends AppCompatActivity {
             Double feelsLikeVal = current.getDouble("feelslike_c");
             Double windSpeedVal = current.getDouble("wind_kph");
             String windDirectionVal = current.getString("wind_dir");
+
+            System.out.println(forecastArray);
+            for(int i = 0; i < forecastArray.length(); i++) {
+                JSONObject curr = forecastArray.getJSONObject(i);
+                TextView currentTV;
+                switch (i) {
+                    case 0: {
+                        //lmao gl
+                    }
+                    default: {
+
+                    }
+                }
+            }
 
             // Update elements
             info.setText(String.format("%s, %s", city, region));
@@ -64,7 +81,6 @@ public class Weather extends AppCompatActivity {
         } catch (InterruptedException | JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     public JSONObject requestRealtimeWeather(String query) throws InterruptedException, JSONException {
