@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -24,7 +25,7 @@ public class Weather extends AppCompatActivity {
 
     LinearLayout current;
     String location;
-    TextView info, temperature, feelsLike, wind, precipitation, humidity, visibility;
+    TextView info, date, temperature, feelsLike, wind, precipitation, humidity, visibility;
     List<TextView> forecasts = new ArrayList<>();
     Boolean isMetric = true;
 
@@ -40,6 +41,7 @@ public class Weather extends AppCompatActivity {
 
         // Store layout elements
         info = findViewById(R.id.info);
+        date = findViewById(R.id.date);
         temperature = findViewById(R.id.temperature);
         feelsLike = findViewById(R.id.feelsLike);
         wind = findViewById(R.id.wind);
@@ -94,7 +96,9 @@ public class Weather extends AppCompatActivity {
             // Location info (non weather related)
             String city = forecastJSON.getJSONObject("location").getString("name");
             String region = forecastJSON.getJSONObject("location").getString("region");
+            String day = forecastJSON.getJSONObject("location").getString("localtime").substring(0, 10);
             info.setText(String.format("%s, %s", city, region));
+            date.setText(day);
 
         } catch (InterruptedException | JSONException e) {
             e.printStackTrace();
@@ -108,36 +112,33 @@ public class Weather extends AppCompatActivity {
         JSONArray forecastArray = forecast.getJSONArray("forecastday");
 
         // Pull values from current
-        Double temperatureVal = current.getDouble("temp_c");
-        Double feelsLikeVal = current.getDouble("feelslike_c");
-        Double windSpeedVal = current.getDouble("wind_kph");
+        double temperatureVal = current.getDouble("temp_c");
+        double feelsLikeVal = current.getDouble("feelslike_c");
+        double windSpeedVal = current.getDouble("wind_kph");
         String windDirectionVal = current.getString("wind_dir");
         Integer precipitationVal = current.getInt("precip_mm");
         Integer humidityVal = current.getInt("humidity");
         Integer visibilityVal = current.getInt("vis_km");
 
-        // Pull day information from forecast
-        List<JSONObject> forecastObjects = new ArrayList<>();
-        for (int i = 1; i < forecastArray.length(); i++) {
-            forecastObjects.add(forecastArray.getJSONObject(i).getJSONObject("day"));
-        }
-
         // Update current day values
-        temperature.setText(String.format("%d°C", Math.round(temperatureVal)));
-        feelsLike.setText(String.format("Feels like %d°C", Math.round(feelsLikeVal)));
-        wind.setText(String.format("Wind: %d km/h (%s)", Math.round(windSpeedVal), windDirectionVal));
-        precipitation.setText(String.format("Precipitation: %dmm", precipitationVal));
-        humidity.setText(String.format("Humidity: %d%%", humidityVal));
-        visibility.setText(String.format("Visibility: %dkm", visibilityVal));
+        temperature.setText(String.format(Locale.CANADA, "%d°C", Math.round(temperatureVal)));
+        feelsLike.setText(String.format(Locale.CANADA, "Feels like %d°C", Math.round(feelsLikeVal)));
+        wind.setText(String.format(Locale.CANADA, "Wind: %d km/h (%s)", Math.round(windSpeedVal), windDirectionVal));
+        precipitation.setText(String.format(Locale.CANADA, "Precipitation: %dmm", precipitationVal));
+        humidity.setText(String.format(Locale.CANADA, "Humidity: %d%%", humidityVal));
+        visibility.setText(String.format(Locale.CANADA, "Visibility: %dkm", visibilityVal));
 
         // Update up to 7 of the forecast text views
-        for (int i = 0; i < forecastObjects.size(); i++) {
-            TextView dayTextView = forecasts.get(i);
-            JSONObject day = forecastObjects.get(i);
+        for (int i = 1; i < forecastArray.length(); i++) {
+            TextView tempTextView = forecasts.get(i - 1);
 
-            Double temperature = day.getDouble("avgtemp_c");
-            dayTextView.setText(String.format("%d°C", Math.round(temperature)));
+            JSONObject day = forecastArray.getJSONObject(i);
+            String date = day.getString("date").substring(0, 10);
+            double temperature  = day.getJSONObject("day").getDouble("avgtemp_c");
+
+            tempTextView.setText(String.format(Locale.CANADA, "%s\n%d°C", date, Math.round(temperature)));
         }
+
     }
 
     public void setImperialValues(JSONObject json) throws JSONException {
@@ -147,35 +148,31 @@ public class Weather extends AppCompatActivity {
         JSONArray forecastArray = forecast.getJSONArray("forecastday");
 
         // Pull values from current
-        Double temperatureVal = current.getDouble("temp_f");
-        Double feelsLikeVal = current.getDouble("feelslike_f");
-        Double windSpeedVal = current.getDouble("wind_mph");
+        double temperatureVal = current.getDouble("temp_f");
+        double feelsLikeVal = current.getDouble("feelslike_f");
+        double windSpeedVal = current.getDouble("wind_mph");
         String windDirectionVal = current.getString("wind_dir");
         Integer precipitationVal = current.getInt("precip_in");
         Integer humidityVal = current.getInt("humidity");
         Integer visibilityVal = current.getInt("vis_miles");
 
-        // Pull day information from forecast
-        List<JSONObject> forecastObjects = new ArrayList<>();
-        for (int i = 1; i < forecastArray.length(); i++) {
-            forecastObjects.add(forecastArray.getJSONObject(i).getJSONObject("day"));
-        }
-
         // Update current day values
-        temperature.setText(String.format("%d°F", Math.round(temperatureVal)));
-        feelsLike.setText(String.format("Feels like %d°F", Math.round(feelsLikeVal)));
-        wind.setText(String.format("Wind: %d mph (%s)", Math.round(windSpeedVal), windDirectionVal));
-        precipitation.setText(String.format("Precipitation: %din", precipitationVal));
-        humidity.setText(String.format("Humidity: %d%%", humidityVal));
-        visibility.setText(String.format("Visibility: %dmi", visibilityVal));
+        temperature.setText(String.format(Locale.CANADA, "%d°F", Math.round(temperatureVal)));
+        feelsLike.setText(String.format(Locale.CANADA, "Feels like %d°F", Math.round(feelsLikeVal)));
+        wind.setText(String.format(Locale.CANADA, "Wind: %d mph (%s)", Math.round(windSpeedVal), windDirectionVal));
+        precipitation.setText(String.format(Locale.CANADA, "Precipitation: %din", precipitationVal));
+        humidity.setText(String.format(Locale.CANADA, "Humidity: %d%%", humidityVal));
+        visibility.setText(String.format(Locale.CANADA, "Visibility: %dmi", visibilityVal));
 
         // Update up to 7 of the forecast text views
-        for (int i = 0; i < forecastObjects.size(); i++) {
-            TextView dayTextView = forecasts.get(i);
-            JSONObject day = forecastObjects.get(i);
+        for (int i = 1; i < forecastArray.length(); i++) {
+            TextView tempTextView = forecasts.get(i - 1);
 
-            Double temperature = day.getDouble("avgtemp_f");
-            dayTextView.setText(String.format("%d°F", Math.round(temperature)));
+            JSONObject day = forecastArray.getJSONObject(i);
+            String date = day.getString("date").substring(0, 10);
+            double temperature  = day.getJSONObject("day").getDouble("avgtemp_f");
+
+            tempTextView.setText(String.format(Locale.CANADA, "%s\n%d°F", date, Math.round(temperature)));
         }
     }
 

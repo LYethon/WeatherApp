@@ -23,6 +23,12 @@
             android:id="@+id/info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingBottom="30dp"/>
 
@@ -78,39 +84,53 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/forecast1"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                    android:id="@+id/forecast1"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="No available data" />
 
             <TextView
                 android:id="@+id/forecast2"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="No available data" />
 
             <TextView
                 android:id="@+id/forecast3"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="No available data" />
 
             <TextView
                 android:id="@+id/forecast4"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="No available data" />
 
             <TextView
                 android:id="@+id/forecast5"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="No available data" />
 
             <TextView
                 android:id="@+id/forecast6"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="No available data" />
 
             <TextView
                 android:id="@+id/forecast7"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="No available data" />
 
         </LinearLayout>
 
