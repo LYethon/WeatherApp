@@ -10,6 +10,7 @@
     tools:context=".Weather">
 
     <LinearLayout
+        android:id="@+id/current"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_row="0"
@@ -46,6 +47,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/precipitation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/humidity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/visibility"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
 
     </LinearLayout>
 

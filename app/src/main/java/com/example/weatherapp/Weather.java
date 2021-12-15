@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,9 +22,11 @@ import okhttp3.Response;
 
 public class Weather extends AppCompatActivity {
 
+    LinearLayout current;
     String location;
-    TextView info, temperature, feelsLike, wind;
-    List<TextView> forecasts = new ArrayList<TextView>();
+    TextView info, temperature, feelsLike, wind, precipitation, humidity, visibility;
+    List<TextView> forecasts = new ArrayList<>();
+    Boolean isMetric = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,9 @@ public class Weather extends AppCompatActivity {
         temperature = findViewById(R.id.temperature);
         feelsLike = findViewById(R.id.feelsLike);
         wind = findViewById(R.id.wind);
+        precipitation = findViewById(R.id.precipitation);
+        humidity = findViewById(R.id.humidity);
+        visibility = findViewById(R.id.visibility);
 
         // Load all 7 forecast elements
         forecasts.add(findViewById(R.id.forecast1));
@@ -52,51 +59,123 @@ public class Weather extends AppCompatActivity {
         try {
             JSONObject forecastJSON = requestForecastWeather(location, 8); // Since it includes the current date
 
+            // If response returned an error, handle it
             if (forecastJSON.has("error")) {
                 Toast.makeText(this, "Invalid location. Please go back and try again.", Toast.LENGTH_LONG).show();
                 return;
             }
 
-            // Pull data from JSON object
-            JSONObject location = forecastJSON.getJSONObject("location");
-            JSONObject current = forecastJSON.getJSONObject("current");
-            JSONObject forecast = forecastJSON.getJSONObject("forecast");
+            // Set on click listener for linear layout
+            current = findViewById(R.id.current);
+            current.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (isMetric) {
+                            isMetric = false;
+                            setImperialValues(forecastJSON);
+                        } else {
+                            isMetric = true;
+                            setMetricValues(forecastJSON);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
-            JSONArray forecastArray = forecast.getJSONArray("forecastday");
-
-            // location
-            String city = location.getString("name");
-            String region = location.getString("region");
-
-            // current
-            Double temperatureVal = current.getDouble("temp_c");
-            Double feelsLikeVal = current.getDouble("feelslike_c");
-            Double windSpeedVal = current.getDouble("wind_kph");
-            String windDirectionVal = current.getString("wind_dir");
-
-            // forecast
-            List<JSONObject> forecastObjects = new ArrayList<JSONObject>();
-            for (int i = 1; i < forecastArray.length(); i++) {
-                forecastObjects.add(forecastArray.getJSONObject(i).getJSONObject("day"));
+            // Set values according to specified units
+            if (isMetric) {
+                setMetricValues(forecastJSON);
+            } else {
+                setImperialValues(forecastJSON);
             }
 
-            // Update elements
+            // Location info (non weather related)
+            String city = forecastJSON.getJSONObject("location").getString("name");
+            String region = forecastJSON.getJSONObject("location").getString("region");
             info.setText(String.format("%s, %s", city, region));
-            temperature.setText(String.format("%d°C", Math.round(temperatureVal)));
-            feelsLike.setText(String.format("Feels like %d°C", Math.round(feelsLikeVal)));
-            wind.setText(String.format("Wind: %d km/h (%s)", Math.round(windSpeedVal), windDirectionVal));
-
-            // Update up to 7 of the forecast textviews
-            for (int i = 0; i < forecastObjects.size(); i++) {
-                TextView dayTextView = forecasts.get(i);
-                JSONObject day = forecastObjects.get(i);
-
-                Double temperature = day.getDouble("avgtemp_c");
-                dayTextView.setText(String.format("%d°C", Math.round(temperature)));
-            }
 
         } catch (InterruptedException | JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void setMetricValues(JSONObject json) throws JSONException {
+        // Pulls and sets metric info from the forecast endpoint JSON object
+        JSONObject current = json.getJSONObject("current");
+        JSONObject forecast = json.getJSONObject("forecast");
+        JSONArray forecastArray = forecast.getJSONArray("forecastday");
+
+        // Pull values from current
+        Double temperatureVal = current.getDouble("temp_c");
+        Double feelsLikeVal = current.getDouble("feelslike_c");
+        Double windSpeedVal = current.getDouble("wind_kph");
+        String windDirectionVal = current.getString("wind_dir");
+        Integer precipitationVal = current.getInt("precip_mm");
+        Integer humidityVal = current.getInt("humidity");
+        Integer visibilityVal = current.getInt("vis_km");
+
+        // Pull day information from forecast
+        List<JSONObject> forecastObjects = new ArrayList<>();
+        for (int i = 1; i < forecastArray.length(); i++) {
+            forecastObjects.add(forecastArray.getJSONObject(i).getJSONObject("day"));
+        }
+
+        // Update current day values
+        temperature.setText(String.format("%d°C", Math.round(temperatureVal)));
+        feelsLike.setText(String.format("Feels like %d°C", Math.round(feelsLikeVal)));
+        wind.setText(String.format("Wind: %d km/h (%s)", Math.round(windSpeedVal), windDirectionVal));
+        precipitation.setText(String.format("Precipitation: %dmm", precipitationVal));
+        humidity.setText(String.format("Humidity: %d%%", humidityVal));
+        visibility.setText(String.format("Visibility: %dkm", visibilityVal));
+
+        // Update up to 7 of the forecast text views
+        for (int i = 0; i < forecastObjects.size(); i++) {
+            TextView dayTextView = forecasts.get(i);
+            JSONObject day = forecastObjects.get(i);
+
+            Double temperature = day.getDouble("avgtemp_c");
+            dayTextView.setText(String.format("%d°C", Math.round(temperature)));
+        }
+    }
+
+    public void setImperialValues(JSONObject json) throws JSONException {
+        // Pulls and sets imperial info from the forecast endpoint JSON object
+        JSONObject current = json.getJSONObject("current");
+        JSONObject forecast = json.getJSONObject("forecast");
+        JSONArray forecastArray = forecast.getJSONArray("forecastday");
+
+        // Pull values from current
+        Double temperatureVal = current.getDouble("temp_f");
+        Double feelsLikeVal = current.getDouble("feelslike_f");
+        Double windSpeedVal = current.getDouble("wind_mph");
+        String windDirectionVal = current.getString("wind_dir");
+        Integer precipitationVal = current.getInt("precip_in");
+        Integer humidityVal = current.getInt("humidity");
+        Integer visibilityVal = current.getInt("vis_miles");
+
+        // Pull day information from forecast
+        List<JSONObject> forecastObjects = new ArrayList<>();
+        for (int i = 1; i < forecastArray.length(); i++) {
+            forecastObjects.add(forecastArray.getJSONObject(i).getJSONObject("day"));
+        }
+
+        // Update current day values
+        temperature.setText(String.format("%d°F", Math.round(temperatureVal)));
+        feelsLike.setText(String.format("Feels like %d°F", Math.round(feelsLikeVal)));
+        wind.setText(String.format("Wind: %d mph (%s)", Math.round(windSpeedVal), windDirectionVal));
+        precipitation.setText(String.format("Precipitation: %din", precipitationVal));
+        humidity.setText(String.format("Humidity: %d%%", humidityVal));
+        visibility.setText(String.format("Visibility: %dmi", visibilityVal));
+
+        // Update up to 7 of the forecast text views
+        for (int i = 0; i < forecastObjects.size(); i++) {
+            TextView dayTextView = forecasts.get(i);
+            JSONObject day = forecastObjects.get(i);
+
+            Double temperature = day.getDouble("avgtemp_f");
+            dayTextView.setText(String.format("%d°F", Math.round(temperature)));
         }
     }
 
