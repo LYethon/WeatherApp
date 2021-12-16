@@ -35,38 +35,46 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Search" />
+            android:text="Search"
+            android:textSize="15dp"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:background="@drawable/border"
         android:gravity="center"
-        android:orientation="vertical"
-        android:layout_marginTop="30dp">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Search History"
-            android:gravity="center" />
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/history1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/history2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/history3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="15dp" />
 
     </LinearLayout>
 
