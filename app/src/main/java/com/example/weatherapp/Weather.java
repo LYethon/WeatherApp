@@ -3,16 +3,20 @@ package com.example.weatherapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -26,7 +30,9 @@ public class Weather extends AppCompatActivity {
     LinearLayout current;
     String location;
     TextView info, date, temperature, feelsLike, wind, precipitation, humidity, visibility;
+    ImageView icon;
     List<TextView> forecasts = new ArrayList<>();
+    List<ImageView> subIcons = new ArrayList<>();
     Boolean isMetric = true;
 
     @Override
@@ -48,6 +54,7 @@ public class Weather extends AppCompatActivity {
         precipitation = findViewById(R.id.precipitation);
         humidity = findViewById(R.id.humidity);
         visibility = findViewById(R.id.visibility);
+        icon = findViewById(R.id.icon);
 
         // Load all 7 forecast elements
         forecasts.add(findViewById(R.id.forecast1));
@@ -57,6 +64,15 @@ public class Weather extends AppCompatActivity {
         forecasts.add(findViewById(R.id.forecast5));
         forecasts.add(findViewById(R.id.forecast6));
         forecasts.add(findViewById(R.id.forecast7));
+
+        //Load all 7 icon elements
+        subIcons.add(findViewById(R.id.icon1));
+        subIcons.add(findViewById(R.id.icon2));
+        subIcons.add(findViewById(R.id.icon3));
+        subIcons.add(findViewById(R.id.icon4));
+        subIcons.add(findViewById(R.id.icon5));
+        subIcons.add(findViewById(R.id.icon6));
+        subIcons.add(findViewById(R.id.icon7));
 
         try {
             JSONObject forecastJSON = requestForecastWeather(location, 8); // Since it includes the current date
@@ -80,7 +96,7 @@ public class Weather extends AppCompatActivity {
                             isMetric = true;
                             setMetricValues(forecastJSON);
                         }
-                    } catch (JSONException e) {
+                    } catch (JSONException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
@@ -105,7 +121,7 @@ public class Weather extends AppCompatActivity {
         }
     }
 
-    public void setMetricValues(JSONObject json) throws JSONException {
+    public void setMetricValues(JSONObject json) throws JSONException, InterruptedException {
         // Pulls and sets metric info from the forecast endpoint JSON object
         JSONObject current = json.getJSONObject("current");
         JSONObject forecast = json.getJSONObject("forecast");
@@ -119,6 +135,11 @@ public class Weather extends AppCompatActivity {
         Integer precipitationVal = current.getInt("precip_mm");
         Integer humidityVal = current.getInt("humidity");
         Integer visibilityVal = current.getInt("vis_km");
+        JSONObject currentCondition = current.getJSONObject("condition");
+
+        String iconUrl = "http://cdn.weatherapi.com/weather/128x128/" + currentCondition.getString("icon").substring(35);
+
+        icon.setImageDrawable(getIcon(iconUrl));
 
         // Update current day values
         temperature.setText(String.format(Locale.CANADA, "%d°C", Math.round(temperatureVal)));
@@ -131,10 +152,15 @@ public class Weather extends AppCompatActivity {
         // Update up to 7 of the forecast text views
         for (int i = 1; i < forecastArray.length(); i++) {
             TextView tempTextView = forecasts.get(i - 1);
+            ImageView tempImageView = subIcons.get(i - 1);
 
             JSONObject day = forecastArray.getJSONObject(i);
             String date = day.getString("date").substring(0, 10);
             double temperature  = day.getJSONObject("day").getDouble("avgtemp_c");
+            JSONObject subCondition = day.getJSONObject("day").getJSONObject("condition");
+            String subIconUrl = "http:" + subCondition.getString("icon");
+
+            tempImageView.setImageDrawable(getIcon(subIconUrl));
 
             tempTextView.setText(String.format(Locale.CANADA, "%s\n%d°C", date, Math.round(temperature)));
         }
@@ -155,6 +181,8 @@ public class Weather extends AppCompatActivity {
         Integer precipitationVal = current.getInt("precip_in");
         Integer humidityVal = current.getInt("humidity");
         Integer visibilityVal = current.getInt("vis_miles");
+        JSONObject currentCondition = current.getJSONObject("condition");
+        String iconUrl = currentCondition.getString("icon");
 
         // Update current day values
         temperature.setText(String.format(Locale.CANADA, "%d°F", Math.round(temperatureVal)));
@@ -212,6 +240,15 @@ public class Weather extends AppCompatActivity {
         return new JSONObject(response);
     }
 
+    public Drawable getIcon(String url) throws InterruptedException, JSONException {
+        IconRunnable iconRunnable = new IconRunnable(url);
+        Thread iconThread = new Thread(iconRunnable);
+
+        iconThread.start();
+        iconThread.join();
+
+        return iconRunnable.getResult();
+    }
 }
 
 class APIRunnable implements Runnable {
@@ -249,5 +286,27 @@ class APIRunnable implements Runnable {
     public String getResponse() {
         return responseString;
     }
+}
 
+class IconRunnable implements Runnable {
+    private String url;
+    private Drawable result;
+
+    public IconRunnable(String u) {
+        url = u;
+    }
+
+    @Override
+    public void run() {
+        try {
+            InputStream input = (InputStream) new URL(url).getContent();
+            result = Drawable.createFromStream(input, "source");
+        } catch (Exception e) {
+            System.out.println("ICON ERROR");
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public Drawable getResult() { return result; }
 }

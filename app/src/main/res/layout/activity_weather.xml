@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:rowCount="2"
+    android:background="#B900143C"
     android:columnCount="1"
+    android:rowCount="2"
     tools:context=".Weather">
 
     <LinearLayout
@@ -14,23 +14,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_row="0"
-        android:layout_column="0"
         android:layout_rowWeight="2"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:layout_column="0"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="#D9FFFFFF" />
 
         <TextView
             android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingBottom="30dp"/>
+            android:paddingBottom="20dp"
+            android:textColor="#D9FFFFFF" />
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:contentDescription="Icon"
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/temperature"
@@ -38,6 +47,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text=":("
+            android:textColor="#D9FFFFFF"
             android:textSize="50dp" />
 
         <TextView
@@ -46,91 +56,181 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingBottom="30dp"
-            android:text="Invalid location entered" />
+            android:text="Invalid location entered"
+            android:textColor="#D9FFFFFF" />
 
         <TextView
             android:id="@+id/wind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:textColor="#D9FFFFFF" />
 
         <TextView
             android:id="@+id/precipitation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="#D9FFFFFF" />
 
         <TextView
             android:id="@+id/humidity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="#D9FFFFFF" />
 
         <TextView
             android:id="@+id/visibility"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="#D9FFFFFF" />
 
     </LinearLayout>
 
     <HorizontalScrollView
         android:layout_row="1"
-        android:layout_column="0"
-        android:layout_rowWeight="1" >
+        android:layout_rowWeight="1"
+        android:layout_column="0">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
-            <TextView
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
                     android:id="@+id/forecast1"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="No available data" />
+                    android:text="No available data"
+                    android:textColor="#D9FFFFFF" />
 
-            <TextView
-                android:id="@+id/forecast2"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="No available data" />
+                <ImageView
+                    android:id="@+id/icon1"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Sub-icon"
+                    android:paddingTop="50dp"/>
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/forecast3"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="No available data" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/forecast2"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="No available data"
+                    android:textColor="#D9FFFFFF" />
 
-            <TextView
-                android:id="@+id/forecast4"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="No available data" />
+                <ImageView
+                    android:id="@+id/icon2"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Sub-icon"
+                    android:paddingTop="50dp"/>
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/forecast5"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="No available data" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/forecast3"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="No available data"
+                    android:textColor="#D9FFFFFF" />
 
-            <TextView
-                android:id="@+id/forecast6"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="No available data" />
+                <ImageView
+                    android:id="@+id/icon3"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Sub-icon"
+                    android:paddingTop="50dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/forecast7"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="No available data" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/forecast4"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="No available data"
+                    android:textColor="#D9FFFFFF" />
+
+                <ImageView
+                    android:id="@+id/icon4"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Sub-icon"
+                    android:paddingTop="50dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/forecast5"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="No available data"
+                    android:textColor="#D9FFFFFF" />
+
+                <ImageView
+                    android:id="@+id/icon5"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Sub-icon"
+                    android:paddingTop="50dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/forecast6"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="No available data"
+                    android:textColor="#D9FFFFFF" />
+
+                <ImageView
+                    android:id="@+id/icon6"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Sub-icon"
+                    android:paddingTop="50dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/forecast7"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="No available data"
+                    android:textColor="#D9FFFFFF" />
+
+                <ImageView
+                    android:id="@+id/icon7"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Sub-icon"
+                    android:paddingTop="50dp" />
+            </RelativeLayout>
 
         </LinearLayout>
 
