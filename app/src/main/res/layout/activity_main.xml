@@ -28,7 +28,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:hint="Toronto" />
+            android:hint="Enter a location (e.g. Toronto)" />
 
         <TextView
             android:id="@+id/searchTextView"
