@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -100,7 +101,8 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" >
+
                 <TextView
                     android:id="@+id/forecast1"
                     android:layout_width="100dp"
@@ -115,11 +117,13 @@
                     android:layout_height="100dp"
                     android:contentDescription="Sub-icon"
                     android:paddingTop="50dp"/>
+
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" >
+
                 <TextView
                     android:id="@+id/forecast2"
                     android:layout_width="100dp"
@@ -133,12 +137,14 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:contentDescription="Sub-icon"
-                    android:paddingTop="50dp"/>
+                    android:paddingTop="50dp" />
+
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" >
+
                 <TextView
                     android:id="@+id/forecast3"
                     android:layout_width="100dp"
@@ -153,12 +159,14 @@
                     android:layout_height="100dp"
                     android:contentDescription="Sub-icon"
                     android:paddingTop="50dp"
-                    android:gravity="center"/>
+                    android:gravity="center" />
+
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" >
+
                 <TextView
                     android:id="@+id/forecast4"
                     android:layout_width="100dp"
@@ -173,11 +181,13 @@
                     android:layout_height="100dp"
                     android:contentDescription="Sub-icon"
                     android:paddingTop="50dp" />
+
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" >
+
                 <TextView
                     android:id="@+id/forecast5"
                     android:layout_width="100dp"
@@ -192,11 +202,13 @@
                     android:layout_height="100dp"
                     android:contentDescription="Sub-icon"
                     android:paddingTop="50dp" />
+
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" >
+
                 <TextView
                     android:id="@+id/forecast6"
                     android:layout_width="100dp"
@@ -211,11 +223,13 @@
                     android:layout_height="100dp"
                     android:contentDescription="Sub-icon"
                     android:paddingTop="50dp" />
+
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" >
+
                 <TextView
                     android:id="@+id/forecast7"
                     android:layout_width="100dp"
@@ -230,6 +244,7 @@
                     android:layout_height="100dp"
                     android:contentDescription="Sub-icon"
                     android:paddingTop="50dp" />
+                
             </RelativeLayout>
 
         </LinearLayout>
