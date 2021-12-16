@@ -137,9 +137,8 @@ public class Weather extends AppCompatActivity {
         Integer visibilityVal = current.getInt("vis_km");
         JSONObject currentCondition = current.getJSONObject("condition");
 
-        String iconUrl = "http://cdn.weatherapi.com/weather/128x128/" + currentCondition.getString("icon").substring(35);
-
-        icon.setImageDrawable(getIcon(iconUrl));
+        // Get icon url
+        String iconUrl = "https://cdn.weatherapi.com/weather/128x128/" + currentCondition.getString("icon").substring(35);
 
         // Update current day values
         temperature.setText(String.format(Locale.CANADA, "%d°C", Math.round(temperatureVal)));
@@ -148,6 +147,9 @@ public class Weather extends AppCompatActivity {
         precipitation.setText(String.format(Locale.CANADA, "Precipitation: %dmm", precipitationVal));
         humidity.setText(String.format(Locale.CANADA, "Humidity: %d%%", humidityVal));
         visibility.setText(String.format(Locale.CANADA, "Visibility: %dkm", visibilityVal));
+
+        // Set icon image
+        icon.setImageDrawable(getIcon(iconUrl));
 
         // Update up to 7 of the forecast text views
         for (int i = 1; i < forecastArray.length(); i++) {
@@ -158,11 +160,10 @@ public class Weather extends AppCompatActivity {
             String date = day.getString("date").substring(0, 10);
             double temperature  = day.getJSONObject("day").getDouble("avgtemp_c");
             JSONObject subCondition = day.getJSONObject("day").getJSONObject("condition");
-            String subIconUrl = "http:" + subCondition.getString("icon");
-
-            tempImageView.setImageDrawable(getIcon(subIconUrl));
+            String subIconUrl = "https:" + subCondition.getString("icon");
 
             tempTextView.setText(String.format(Locale.CANADA, "%s\n%d°C", date, Math.round(temperature)));
+            tempImageView.setImageDrawable(getIcon(subIconUrl));
         }
 
     }
@@ -202,6 +203,9 @@ public class Weather extends AppCompatActivity {
 
             tempTextView.setText(String.format(Locale.CANADA, "%s\n%d°F", date, Math.round(temperature)));
         }
+
+        // Icon does not need to be updated because it does not change when units change
+
     }
 
     public JSONObject requestRealtimeWeather(String query) throws InterruptedException, JSONException {
